@@ -12,5 +12,4 @@ module.exports = {
     // message for gracefull error handling on app
     res.send(500, {error: error.message});
   }
-  
 };

@@ -1,14 +1,15 @@
 // var User = require('./userModel.js'); //find correct path
 
 module.exports = {
-  getProfile: function() {
+  fitbit: function () {
 
   },
 
-  getTile: function() {
+  twitter: function () {
 
   },
 
-  
+  github: function () {
 
+  }
 };
