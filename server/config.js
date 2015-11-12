@@ -1,6 +1,6 @@
 var Sequelize = require("sequelize");
 
-var sequelize = new Sequelize('nowDB', 'root', '', {
+var sequelize = new Sequelize('nowdb', 'root', '', {
   host: 'localhost',
   dialect: 'postgres',
 
@@ -8,7 +8,7 @@ var sequelize = new Sequelize('nowDB', 'root', '', {
     max: 5,
     min: 0,
     idle: 10000
-  },
+  }
 
 });
 
@@ -78,13 +78,10 @@ User.hasOne(AccountGitHub);
 
 
 
-// creates these tables if they don't already exist. Pass in {force: true}
+// creates all tables if they don't already exist. Pass in {force: true}
 // to drop any existing user and message tables and make new ones.
-User.sync();
-AccountFB.sync();
-AccountFitBit.sync();
-AccountTwitter.sync();
-AccountGitHub.sync();
+sequelize.sync();
+
 
 exports.User = User;
 exports.AccountFB = AccountFB;
