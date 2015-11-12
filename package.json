@@ -1,18 +1,25 @@
 {
-  "name": "the nower of pow",
+  "name": "pow",
   "version": "0.0.1",
   "description": "",
-  "main": "basic-server.js",
+  "main": "server/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "jscs ../"
+    "lint": "jscs ./"
   },
+  "pre-commit": "lint",
   "author": "festive-toasters",
   "license": "MIT",
   "dependencies": {
     "bluebird": "^3.0.5",
     "pg": "^4.4.3",
     "pg-hstore": "^2.3.2",
-    "request": "^2.65.0"
+    "request": "^2.65.0",
+    "jshint-stylish": "^0.2.0",
+    "pre-commit": "^1.1.1"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-jshint": "^0.11.3"
   }
 }
