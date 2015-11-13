@@ -16,27 +16,27 @@ var sequelize = new Sequelize('nowdb', dbConfig.username, dbConfig.password, {
 // we define the models we need using js--we don't need a schema file
 var User = sequelize.define('User', {
   username: Sequelize.STRING,
-  fbID: Sequelize.STRING,
-  name: Sequelize.STRING,
-  location: Sequelize.STRING
+  fbID: Sequelize.STRING/*,*/
+  // name: Sequelize.STRING,
+  // location: Sequelize.STRING
   //almost certainly will need to add more fields here as we build out
 });
 
-var AccountFB = sequelize.define('AccountFB', {
-  FBname: Sequelize.STRING,
-  fbID: Sequelize.STRING,
-  latestActivityType: Sequelize.STRING,
-  latestActivityContent: Sequelize.STRING,
-  latestActivityTimeStamp: Sequelize.DATE
-  /*need more information about which FB events we're considering here and what the format that they come
-  through the API in. That's a significant chunk of work, so I'm leaving it for another task*/
-});
+// var AccountFB = sequelize.define('AccountFB', {
+//   FBname: Sequelize.STRING,
+//   fbID: Sequelize.STRING,
+//   latestActivityType: Sequelize.STRING,
+//   latestActivityContent: Sequelize.STRING,
+//   latestActivityTimeStamp: Sequelize.DATE
+//   /*need more information about which FB events we're considering here and what the format that they come
+//   through the API in. That's a significant chunk of work, so I'm leaving it for another task*/
+// });
 
 // puts a UserId column on each AccountFB instance
 // gives `.setUser` method, available inside the .success callback after creating a new instance of AccountFB
-AccountFB.belongsTo(User);
-// enables bi-directional associations between Users and AccountFBs
-User.hasOne(AccountFB);
+// AccountFB.belongsTo(User);
+// // enables bi-directional associations between Users and AccountFBs
+// User.hasOne(AccountFB);
 
 var AccountFitBit = sequelize.define('AccountFitBit', {
   fitBitname: Sequelize.STRING,
@@ -84,7 +84,7 @@ sequelize.sync();
 
 
 exports.User = User;
-exports.AccountFB = AccountFB;
+// exports.AccountFB = AccountFB;
 exports.AccountFitBit = AccountFitBit;
 exports.AccountTwitter = AccountTwitter;
 exports.AccountGitHub = AccountGitHub;
