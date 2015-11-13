@@ -1,14 +1,16 @@
 // var morgan = require('morgan'); // used for logging incoming request
+var partials = require('express-partials');
 var bodyParser = require('body-parser');
 var helpers = require('./helpers.js'); // our custom middleware
 var passport = require('passport');
+var session = require('express-session');
 var FacebookStrategy = require('passport-facebook').Strategy;
 var cookieParser = require('cookie-parser');
+var db = require('./../config.js');
 
 var FACEBOOK_APP_ID = "1631022490495363";
 var FACEBOOK_APP_SECRET = "94fb8b098c0b2ffcd7287f1a00dcd05a";
 
-var partials = require('express-partials');
 
 module.exports = function (app, express) {
   // Express 4 allows us to use multiple routers with their own configurations
@@ -24,7 +26,7 @@ module.exports = function (app, express) {
   app.use(bodyParser.json());
   app.use(express.static(__dirname + '/../../client'));
   app.use(cookieParser());
-  app.use(session({ secret: 'keyboard cat' }));
+  app.use(session({ secret: 'saxaphone mongoose' }));
   // Initialize Passport!  Also use passport.session() middleware, to support
   // persistent login sessions (recommended).
   app.use(passport.initialize());
@@ -36,16 +38,37 @@ module.exports = function (app, express) {
   //                          //
   //////////////////////////////
 
+
+  passport.serializeUser(function (user, done) {
+    done(null, user);
+  });
+
+  passport.deserializeUser(function (obj, done) {
+    done(null, obj);
+  });
+
   passport.use(new FacebookStrategy({
     clientID: FACEBOOK_APP_ID,
     clientSecret: FACEBOOK_APP_SECRET,
-    callbackURL: "http://localhost:3000/auth/facebook/callback"
+    callbackURL: "http://localhost:8000/auth/facebook/callback"
   },
     function (accessToken, refreshToken, profile, done) {
       // To keep the example simple, the user's Facebook profile is returned to
       // represent the logged-in user.  In a typical application, you would want
       // to associate the Facebook account with a user record in your database,
       // and return that user instead.
+      console.log('id ' + profile.id + ' name ' + profile.displayName + ' keys ' + Object.keys(profile));
+      db.User
+        .findOrCreate({where: {
+          username: profile.displayName,
+          fbID: profile.id
+        }})
+        .spread(function (user, created) {
+          console.log(user.get({
+            plain: true
+          }));
+          console.log(created);
+        });
       return done(null, profile);
     }
   ));
@@ -60,7 +83,8 @@ module.exports = function (app, express) {
   app.get('/auth/facebook/callback',
     passport.authenticate('facebook', { failureRedirect: '/signin' }),
     function (req, res) {
-      res.redirect('/');
+      // console.log(req.body);
+      res.redirect('/dashboard');
     });
 
   //////////////////////////////
@@ -90,6 +114,5 @@ function ensureAuthenticated(req, res, next) {
   }
   res.redirect('/signin');
 }
-
 
 
