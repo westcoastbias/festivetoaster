@@ -57,17 +57,16 @@ module.exports = function (app, express) {
       // represent the logged-in user.  In a typical application, you would want
       // to associate the Facebook account with a user record in your database,
       // and return that user instead.
-      console.log('id ' + profile.id + ' name ' + profile.displayName + ' keys ' + Object.keys(profile));
       db.User
         .findOrCreate({where: {
           username: profile.displayName,
           fbID: profile.id
         }})
         .spread(function (user, created) {
-          console.log(user.get({
-            plain: true
-          }));
-          console.log(created);
+          // console.log(user.get({
+          //   plain: true
+          // }));
+          // console.log(created);
         });
       return done(null, profile);
     }
@@ -83,7 +82,6 @@ module.exports = function (app, express) {
   app.get('/auth/facebook/callback',
     passport.authenticate('facebook', { failureRedirect: '/signin' }),
     function (req, res) {
-      // console.log(req.body);
       res.redirect('/dashboard');
     });
 
