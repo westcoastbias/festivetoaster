@@ -13,7 +13,7 @@ window.Driftly = Backbone.View.extend({
     this.router = new Driftly.Router({ el: this.$el.find("#container" )});
     console.log(this);
     this.router.on('route', this.updateNav, this);
-
+    console.log('something');
     Backbone.history.start({ pushState: true });
   },
 
