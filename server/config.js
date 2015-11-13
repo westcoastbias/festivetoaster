@@ -1,7 +1,7 @@
 var Sequelize = require("sequelize");
 var dbConfig = require('./dbConfig');
 
-var sequelize = new Sequelize('nowdb', 'root', dbConfig.password, {
+var sequelize = new Sequelize('nowdb', dbConfig.username, dbConfig.password, {
   host: 'localhost',
   dialect: 'postgres',
 
@@ -18,8 +18,7 @@ var User = sequelize.define('User', {
   username: Sequelize.STRING,
   fbID: Sequelize.STRING,
   name: Sequelize.STRING,
-  location: Sequelize.STRING,
-  timestamps: true
+  location: Sequelize.STRING
   //almost certainly will need to add more fields here as we build out
 });
 
