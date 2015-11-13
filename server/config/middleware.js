@@ -11,13 +11,14 @@ var FitbitClient = require('fitbit-client-oauth2');
 var FACEBOOK_APP_ID = "1631022490495363";
 var FACEBOOK_APP_SECRET = "94fb8b098c0b2ffcd7287f1a00dcd05a";
 
+var partials = require('express-partials');
 
 module.exports = function (app, express) {
   // Express 4 allows us to use multiple routers with their own configurations
   var userRouter = express.Router();
   var apiRouter = express.Router();
 
-  app.set('views', __dirname + '/views');
+  app.set('views', __dirname + '/../../client/templates');
   app.set('view engine', 'ejs');
   app.use(partials());
 
@@ -167,6 +168,27 @@ module.exports = function (app, express) {
   //                          //
   //////////////////////////////
 
+  app.get('/', function (req, res) {
+    res.render('index');
+  });
+
+  app.get('/dashboard', function (req, res) {
+    res.render('index');
+  });
+
+  app.get('/profile', function (req, res) {
+    res.render('profile');
+  });
+
+  app.get('/connect', function (req, res) {
+    res.render('connect');
+  });
+
+  app.get('/signin', function (req, res) {
+    res.render('signin');
+  });
+
+  app.use(express.static(__dirname + '/../../client'));
 
   app.use('/users', userRouter); // use user router for all user request
 
