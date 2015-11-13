@@ -86,7 +86,7 @@ module.exports = function (app, express) {
       res.redirect('/dashboard');
     });
 
-  app.get('/users', function(req, res) {
+  app.get('/users', function (req, res) {
     res.send(JSON.stringify([{
       name: 'Jackson Sharf',
       steps: 500,
