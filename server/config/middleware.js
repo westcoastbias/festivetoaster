@@ -108,6 +108,66 @@ module.exports = function (app, express) {
   //                          //
   //////////////////////////////
 
+  //////////////////////////////
+  //                          //
+  //   FITBIT AUTH PORTION    //
+  //                          //
+  //////////////////////////////
+
+
+  var client = new FitbitClient('22B2V3', '1fb7088fd54576f1025f23a88d03f371');
+  var redirect_uri = 'http://localhost:8000/auth/fitbit/callback';
+  var scope =  [ 'activity' ];
+  console.log('client =', client);
+  app.get('/auth/fitbit', function(req, res, next) {
+        
+      var authorization_uri = client.getAuthorizationUrl(redirect_uri, scope);
+      
+      res.redirect(authorization_uri);
+  }); 
+        
+  app.get('/auth/fitbit/callback', function(req, res, next) {
+  
+      var code = req.query.code;
+      console.log('code =', code);
+      
+      client.getToken(code, redirect_uri)
+          .then(function(token) {
+            token = token.token;
+            //write access token and refresh token to database under this user
+
+              // ... save your token on db or session... 
+              console.log('token =', token);
+              // then redirect
+              res.end();
+              // res.redirect(302, '/user');
+  
+          })
+          .catch(function(err) {
+              console.log('error');
+              // something went wrong.
+              res.send(500, err);
+          
+          });
+  
+  });
+
+  client.getTimeSeries({
+    access_token: 'eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE0NDc0NTg2OTgsInNjb3BlcyI6InJhY3QiLCJzdWIiOiIzVFhYOVkiLCJhdWQiOiIyMkIyVjMiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJpYXQiOjE0NDc0NTUwOTh9.cCSVtp50UpjnRm_p1bjxyQBkv1oJlQ6pQJ6CNU_qWxA'})
+  .then(function(res) {
+      console.log('resultsasdfasdfas: ', res);
+  }).catch(function(err) {
+      console.log('error getting user data', err);
+  });
+
+  
+
+  //////////////////////////////
+  //                          //
+  //    END FITBIT PORTION    //
+  //                          //
+  //////////////////////////////
+
   app.get('/', function (req, res) {
     res.render('index');
   });
