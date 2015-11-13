@@ -1,6 +1,7 @@
 var express = require('express');
 var db = require('./config.js');
 
+
 var app = express();
 
 // mongoose.connect('mongodb://localhost/shortly'); // connect to mongo database named shortly
