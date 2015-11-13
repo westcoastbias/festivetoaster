@@ -48,5 +48,7 @@ window.Driftly = Backbone.View.extend({
       .removeClass('selected')
       .filter('.' + routeName)
       .addClass('selected');
+    // this.$el.append('hello world');
+    // return this;
   }
 });
