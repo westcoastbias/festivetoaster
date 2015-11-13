@@ -1,4 +1,5 @@
-var AppModel = Backbone.Model.extend({
+Driftly.AppModel = Backbone.Model.extend({
   initialize: function (params) {
+
   }
 });
