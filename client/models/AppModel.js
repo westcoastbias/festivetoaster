@@ -1,4 +1,4 @@
-var AppModel = Backbone.Model.extend({
+Shortly.AppModel = Backbone.Model.extend({
   initialize: function (params) {
   }
 });

@@ -9,15 +9,35 @@ module.exports = function (app, express) {
   var userRouter = express.Router();
   var apiRouter = express.Router();
 
-  app.set('views', __dirname + '/views');
+  app.set('views', __dirname + '/../../client/templates');
   app.set('view engine', 'ejs');
   app.use(partials());
 
   // app.use(morgan('dev'));
   app.use(bodyParser.urlencoded({extended: true}));
   app.use(bodyParser.json());
-  app.use(express.static(__dirname + '/../../client'));
 
+  app.get('/', function (req, res) {
+    res.render('index');
+  });
+
+  app.get('/dashboard', function (req, res) {
+    res.render('dashboard');
+  });
+
+  app.get('/profile', function (req, res) {
+    res.render('profile');
+  });
+
+  app.get('/connect', function (req, res) {
+    res.render('connect');
+  });
+
+  app.get('/signin', function (req, res) {
+    res.render('signin');
+  });
+
+  app.use(express.static(__dirname + '/../../client'));
 
   app.use('/users', userRouter); // use user router for all user request
 
