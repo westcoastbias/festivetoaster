@@ -2,11 +2,16 @@
 var bodyParser = require('body-parser');
 var helpers = require('./helpers.js'); // our custom middleware
 
+var partials = require('express-partials');
 
 module.exports = function (app, express) {
   // Express 4 allows us to use multiple routers with their own configurations
   var userRouter = express.Router();
   var apiRouter = express.Router();
+
+  app.set('views', __dirname + '/views');
+  app.set('view engine', 'ejs');
+  app.use(partials());
 
   // app.use(morgan('dev'));
   app.use(bodyParser.urlencoded({extended: true}));
