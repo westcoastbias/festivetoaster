@@ -6,11 +6,14 @@ module.exports = {
   fitbit: {
     //comment all this back in when working on it
     get: function (req, res) {
-    //       db.AccountFitBit.findOne(/*fill this in*/)
-    //         .then(function(account) {
-    //           res.json(account);
-    //         });
-        },
+      var userID = req.userID;
+      db.AccountFitBit.findOne({
+        where: { userID: userID }
+      })
+      .then(function (fitBitAccount) {
+        res.json(fitBitAccount);
+      });
+    },
     post: function (req, res) {
     //   db.AccountFitBit.findOrCreate({where: placeholder/*fill this in*/})
     //     .then(function(account) {
