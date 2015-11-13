@@ -22,7 +22,7 @@ module.exports = function (app, express) {
   });
 
   app.get('/dashboard', function (req, res) {
-    res.render('dashboard');
+    res.render('index');
   });
 
   app.get('/profile', function (req, res) {
