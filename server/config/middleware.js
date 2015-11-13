@@ -7,7 +7,7 @@ var session = require('express-session');
 var FacebookStrategy = require('passport-facebook').Strategy;
 var cookieParser = require('cookie-parser');
 var db = require('./../config.js');
-
+var FitbitClient = require('fitbit-client-oauth2');
 var FACEBOOK_APP_ID = "1631022490495363";
 var FACEBOOK_APP_SECRET = "94fb8b098c0b2ffcd7287f1a00dcd05a";
 
@@ -84,6 +84,22 @@ module.exports = function (app, express) {
     function (req, res) {
       res.redirect('/dashboard');
     });
+
+  app.get('/users', function(req, res) {
+    res.send(JSON.stringify([{
+      name: 'Jackson Sharf',
+      steps: 500,
+      date: Date.now() + 500},
+      {
+        name: 'Lucas Ruprecht',
+        steps: 1000,
+        date: Date.now() + 1000},
+      {
+        name: 'Yoshi Sushi',
+        steps: 10,
+        date: Date.now()}
+      ]));
+  });
 
   //////////////////////////////
   //                          //

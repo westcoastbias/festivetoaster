@@ -17,6 +17,7 @@
     "express": "^4.13.3",
     "express-partials": "^0.3.0",
     "express-session": "^1.12.1",
+    "fitbit-client-oauth2": "^2.0.2",
     "jshint-stylish": "^0.2.0",
     "passport": "^0.3.2",
     "passport-facebook": "^2.0.0",
