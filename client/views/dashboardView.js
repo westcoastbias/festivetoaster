@@ -6,6 +6,7 @@ Driftly.DashboardView = Backbone.View.extend({
   initialize: function () {
     this.collection.on('sync', this.addAll, this);
     this.collection.fetch();
+    console.log('fetching');
   },
 
   render: function () {
