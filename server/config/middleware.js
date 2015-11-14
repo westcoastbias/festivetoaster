@@ -41,7 +41,7 @@ module.exports = function (app, express) {
 
 
   passport.serializeUser(function (user, done) {
-    done(null, user);
+    done(null, user.id);
   });
 
   passport.deserializeUser(function (obj, done) {
@@ -63,7 +63,8 @@ module.exports = function (app, express) {
           username: profile.displayName,
           fbID: profile.id
         }})
-        .spread(function (user, created) {
+        .then(function (user, created) {
+          console.log('user in create ' + JSON.stringify(user));
           // console.log(user.get({
           //   plain: true
           // }));
@@ -76,6 +77,8 @@ module.exports = function (app, express) {
   app.get('/auth/facebook',
     passport.authenticate('facebook'),
     function (req, res) {
+      console.log('inside /auth/facebook');
+      console.log(req);
       // The request will be redirected to Facebook for authentication, so this
       // function will not be called.
     });
@@ -83,7 +86,18 @@ module.exports = function (app, express) {
   app.get('/auth/facebook/callback',
     passport.authenticate('facebook', { failureRedirect: '/signin' }),
     function (req, res) {
+      // don't need to know who the user is right now, so not dealing with this
+      // the issue we're struggling with is getting the user's id back to the front end
+      var fbID = req.user.id;
+      db.User.findOne({
+        where: {
+          fbID: fbID
+        }
+      })
+      .then(function (user) {
+      res.session.user = user.id;
       res.redirect('/dashboard');
+      });
     });
 
   app.get('/users', function (req, res) {
@@ -129,7 +143,7 @@ module.exports = function (app, express) {
   app.get('/auth/fitbit/callback', function(req, res, next) {
   
       var code = req.query.code;
-      console.log('code =', code);
+      // console.log('code =', code);
       
       client.getToken(code, redirect_uri)
           .then(function(token) {
@@ -137,7 +151,7 @@ module.exports = function (app, express) {
             //write access token and refresh token to database under this user
 
               // ... save your token on db or session... 
-              console.log('token =', token);
+              // console.log('token =', token);
               // then redirect
               res.end();
               // res.redirect(302, '/user');
@@ -155,9 +169,9 @@ module.exports = function (app, express) {
   client.getTimeSeries({
     access_token: 'eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE0NDc0NTg2OTgsInNjb3BlcyI6InJhY3QiLCJzdWIiOiIzVFhYOVkiLCJhdWQiOiIyMkIyVjMiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJpYXQiOjE0NDc0NTUwOTh9.cCSVtp50UpjnRm_p1bjxyQBkv1oJlQ6pQJ6CNU_qWxA'})
   .then(function(res) {
-      console.log('resultsasdfasdfas: ', res);
+      // console.log('resultsasdfasdfas: ', res);
   }).catch(function(err) {
-      console.log('error getting user data', err);
+      // console.log('error getting user data', err);
   });
 
   

@@ -6,5 +6,5 @@ module.exports = function (app) {
 
   app.get('/profile', userController.getProfile);
   app.post('/tile', userController.newTile);
-  app.get('/tile', userController.getUsers);
+  app.get('/users', userController.getUsers);
 };

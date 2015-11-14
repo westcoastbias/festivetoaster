@@ -15,6 +15,7 @@ module.exports = {
       });
     },
     post: function (req, res) {
+      
     //   db.AccountFitBit.findOrCreate({where: placeholder/*fill this in*/})
     //     .then(function(account) {
     //       //fill this in
