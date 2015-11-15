@@ -39,12 +39,12 @@ var User = sequelize.define('User', {
 // User.hasOne(AccountFB);
 
 var AccountFitBit = sequelize.define('AccountFitBit', {
-  fitBitname: Sequelize.STRING,
   fitBitID: Sequelize.STRING,
-  latestActivityType: Sequelize.STRING,
-  latestActivityContent: Sequelize.STRING,
-  latestActivityTimeStamp: Sequelize.DATE
-  //need to understand the data coming from fitBit better to complete this
+  fitBitAccessToken: Sequelize.STRING,
+  fitBitRefreshToken: Sequelize.STRING,
+  latestSteps: Sequelize.INTEGER,
+  //need to see if .DATE works here or if we need to switch to string
+  latestStepsTimeStamp: Sequelize.DATE
 });
 
 AccountFitBit.belongsTo(User);
