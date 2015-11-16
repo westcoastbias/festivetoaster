@@ -76,8 +76,6 @@ module.exports = function (app, express) {
   app.get('/auth/facebook',
     passport.authenticate('facebook'),
     function (req, res) {
-      console.log('inside /auth/facebook');
-      console.log(req);
       // The request will be redirected to Facebook for authentication, so this
       // function will not be called.
     });
@@ -116,12 +114,6 @@ module.exports = function (app, express) {
 
   //////////////////////////////
   //                          //
-  //   END FACEBOOK PORTION   //
-  //                          //
-  //////////////////////////////
-
-  //////////////////////////////
-  //                          //
   //   FITBIT AUTH PORTION    //
   //                          //
   //////////////////////////////
@@ -130,13 +122,13 @@ module.exports = function (app, express) {
   var client = new FitbitClient('22B2V3', '1fb7088fd54576f1025f23a88d03f371');
   var redirect_uri = 'http://localhost:8000/auth/fitbit/callback';
   var scope =  [ 'activity' ];
-
+  
   app.get('/auth/fitbit', 
     function(req, res, next) {
       var authorization_uri = client.getAuthorizationUrl(redirect_uri, scope);
       res.redirect(authorization_uri);
   }); 
-        
+
   app.get('/auth/fitbit/callback', ensureAuthenticated, function(req, res, next) {
     var code = req.query.code;
     client.getToken(code, redirect_uri)
@@ -176,6 +168,7 @@ module.exports = function (app, express) {
                 });
               });
             });
+
           });
       });
     })
