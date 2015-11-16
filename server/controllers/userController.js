@@ -8,26 +8,36 @@ module.exports = {
   getProfile: function (req, res) {
   },
 
-  getUsers: function (callback) {
+  getUsers: function (req, res) {
     var userArray = [];
+    console.log('hitting getUsers');
     db.User.findAll()
     .then(function (allUsers) {
       allUsers.forEach(function (user) {
         db.AccountFitBit.findOne({
-          where: { userID: user.id }
+          where: { UserId: user.id }
         })
         .then(function (fitBitAccount) {
-          userArray.push({
-            userID: user.id,
-            username: user.username,
-            steps: fitBitAccount.stepCount,
-            stepsDate: fitBitAccount.stepDate
-          });
+          if ( fitBitAccount ) {
+            userArray.push({
+              userID: user.id,
+              name: user.username,
+              steps: fitBitAccount.latestSteps,
+              stepsDate: fitBitAccount.latestStepsTimeStamp
+            });
+          }
+        })
+        .catch( function(err) {
+          console.error(err);
         });
       });
     })
-    .done(function () {
-      callback( userArray );
+    .then(function () {
+      console.log('userArray is ' + userArray);
+      res.send( JSON.stringify(userArray) );
+    })
+    .catch( function (err) {
+      console.error(err);
     });
   },
 

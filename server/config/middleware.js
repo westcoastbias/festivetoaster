@@ -76,8 +76,6 @@ module.exports = function (app, express) {
   app.get('/auth/facebook',
     passport.authenticate('facebook'),
     function (req, res) {
-      console.log('inside /auth/facebook');
-      console.log(req);
       // The request will be redirected to Facebook for authentication, so this
       // function will not be called.
     });
@@ -98,27 +96,21 @@ module.exports = function (app, express) {
       });
     });
 
-  app.get('/users', function (req, res) {
-    res.send(JSON.stringify([{
-      name: 'Jackson Sharf',
-      steps: 500,
-      date: Date.now() + 500},
-      {
-        name: 'Lucas Ruprecht',
-        steps: 1000,
-        date: Date.now() + 1000},
-      {
-        name: 'Yoshi Sushi',
-        steps: 10,
-        date: Date.now()}
-      ]));
-  });
-
-  //////////////////////////////
-  //                          //
-  //   END FACEBOOK PORTION   //
-  //                          //
-  //////////////////////////////
+  // app.get('/users', function (req, res) {
+  //   res.send(JSON.stringify([{
+  //     name: 'Jackson Sharf',
+  //     steps: 500,
+  //     date: Date.now() + 500},
+  //     {
+  //       name: 'Lucas Ruprecht',
+  //       steps: 1000,
+  //       date: Date.now() + 1000},
+  //     {
+  //       name: 'Yoshi Sushi',
+  //       steps: 10,
+  //       date: Date.now()}
+  //     ]));
+  // });
 
   //////////////////////////////
   //                          //
@@ -130,12 +122,12 @@ module.exports = function (app, express) {
   var client = new FitbitClient('22B2V3', '1fb7088fd54576f1025f23a88d03f371');
   var redirect_uri = 'http://localhost:8000/auth/fitbit/callback';
   var scope =  [ 'activity' ];
-
-  app.get('/auth/fitbit',
+  
+  app.get('/auth/fitbit', 
     function(req, res, next) {
       var authorization_uri = client.getAuthorizationUrl(redirect_uri, scope);
       res.redirect(authorization_uri);
-  });
+  }); 
 
   app.get('/auth/fitbit/callback', ensureAuthenticated, function(req, res, next) {
     var code = req.query.code;
@@ -147,38 +139,37 @@ module.exports = function (app, express) {
           db.AccountFitBit.findOrCreate({
             where: {
               fitBitID: token.user_id} })
-          .then(function(account) {
-            db.AccountFitBit.findOne({fitBitID: token.user_id})
-            .then(function(account) {
-              account.update({
-                fitBitAccessToken: token.access_token,
-                fitBitRefreshToken: token.refresh_token})
-              .then(function(accountObj) {
+          .spread(function(account, created) {
+              console.log('second account down is ' + JSON.stringify(account.dataValues));
                 client.getTimeSeries({
                   access_token: token.access_token,
                   refresh_token: token.refresh_token})
                 .then(function(results) {
-                  db.AccountFitBit.findOne({fitBitID: token.user_id})
-                  .then(function(account) {
+                    var fitBitInfo = results['activities-steps'][0];
                     account.update({
-                      latestSteps: results['activities-steps'][0].value,
-                      latestStepsTimeStamp: results['activities-steps'][0].dateTime})
+                      latestSteps: fitBitInfo.value, 
+                      latestStepsTimeStamp: fitBitInfo.dateTime,
+                      fitBitAccessToken: token.access_token, 
+                      fitBitRefreshToken: token.refresh_token,
+                      UserId: user.id
+                    })
                     .then(function(accountObj) {
                       // console.log('accountOBj.dataValues =', accountObj.dataValues);
                       // console.log('results: ', results);
                       res.redirect('/dashboard');
                     });
                   })
-                })
+                // })
                 .catch(function(err) {
                     console.log('error getting user data', err);
                     res.send(500, err);
                 });
               });
-            });
+            // });
+
           });
-      });
-    })
+      })
+    // })
     .catch(function(err) {
         console.log('error getting token');
         res.send(500, err);
@@ -203,6 +194,12 @@ module.exports = function (app, express) {
     res.render('index');
   });
 
+  app.get('/logout', 
+    function (req, res) {
+    res.session = null;
+    res.redirect('/signin');
+  });
+
   app.get('/profile',
     ensureAuthenticated,
     function (req, res) {
@@ -221,7 +218,8 @@ module.exports = function (app, express) {
 
   app.use(express.static(__dirname + '/../../client'));
 
-  app.use('/users', userRouter);
+  app.get('/users', ensureAuthenticated, userRouter); 
+
 
   app.use('/api', apiRouter);
   app.use(helpers.errorLogger);
