@@ -1,6 +1,9 @@
 var Sequelize = require("sequelize");
 var dbConfig = require('./dbConfig');
-var match = process.env.DATABASE_URL.match(/postgres:\/\/([^:]+):([^@]+)@([^:]+):(\d+)\/(.+)/)
+var match; 
+if(process.env.DATABASE_URL) {
+  match = process.env.DATABASE_URL.match(/postgres:\/\/([^:]+):([^@]+)@([^:]+):(\d+)\/(.+)/) ;
+} 
 var sequelize;
 
 if ( process.env.DATABASE_URL ) {
