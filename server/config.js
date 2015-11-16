@@ -80,7 +80,7 @@ User.hasOne(AccountGitHub);
 
 // creates all tables if they don't already exist. Pass in {force: true}
 // to drop any existing user and message tables and make new ones.
-sequelize.sync({force:true});
+sequelize.sync();
 
 
 exports.User = User;

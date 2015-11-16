@@ -14,8 +14,8 @@
       </div>
       <div id="navbar" class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
-          <li class="active"><a href="/">Home</a></li>
           <li><a href="dashboard">Dashboard</a></li>
+          <li><a href="connect">Connect</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li><a href='/logout' class='logout'>Logout</a></li>
@@ -31,19 +31,32 @@
 </script>
 
 <script id='dashboard' type='text/x-handlebars-template'>
-
+    <br>
+    <br>
     <h1>Dashboard</h1>
-    <div class="fitbit">
-      <form action="/auth/fitbit" method="post">
-          <input class="btn" type="submit" value="Submit">
-      </form>
-    </div>
 </script>
 
 <script id='tile' type='text/x-handlebars-template'>
     <h2>{{ name }}</h2>
     {{ steps }}
     </div>
+</script>
+
+<script id='profile' type='text/x-handlebars-template'>
+    <br>
+    <br>
+    <h1>Profile</h1>
+    {{ name }}
+</script>
+
+<script id='connect' type='text/x-handlebars-template'>
+  <br>
+  <br>
+  <h2>Connect your accounts</h2>
+    <form id="fitbit" action="/auth/fitbit" method="get">
+        <input type="submit" value="Connect to Fitbit">
+    </form>
+  </div>
 </script>
 
 <script>

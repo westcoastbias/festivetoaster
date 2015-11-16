@@ -136,33 +136,22 @@ module.exports = function (app, express) {
       token = token.token;
       db.User.findOne({ where: {fbID: req.user.dataValues.fbID} })
       .then(function(user) {
-          db.AccountFitBit.findOrCreate({ 
-            where: { 
+          db.AccountFitBit.findOrCreate({
+            where: {
               fitBitID: token.user_id} })
           .spread(function(account, created) {
-            // console.log('farthest out account is ' + Object.keys(account));
-            // console.log('was account created ' + created);
-            // db.AccountFitBit.findOne({fitBitID: token.user_id})
-            // .then(function(account) {
               console.log('second account down is ' + JSON.stringify(account.dataValues));
-              // account.update({
-              //   fitBitAccessToken: token.access_token, 
-              //   fitBitRefreshToken: token.refresh_token,
-              //   UserId: user.id})
-              // .then(function(accountObj) {
                 client.getTimeSeries({
                   access_token: token.access_token,
                   refresh_token: token.refresh_token})
                 .then(function(results) {
-                  // db.AccountFitBit.findOne({fitBitID: token.user_id})
-                  // .then(function(account) {
                     var fitBitInfo = results['activities-steps'][0];
                     account.update({
                       latestSteps: fitBitInfo.value, 
-                      latestStepsTimeStamp: fitBitInfo.dateTime/*,*/
-                      // fitBitAccessToken: token.access_token, 
-                      // fitBitRefreshToken: token.refresh_token,
-                      // UserId: user.id
+                      latestStepsTimeStamp: fitBitInfo.dateTime,
+                      fitBitAccessToken: token.access_token, 
+                      fitBitRefreshToken: token.refresh_token,
+                      UserId: user.id
                     })
                     .then(function(accountObj) {
                       // console.log('accountOBj.dataValues =', accountObj.dataValues);
@@ -193,13 +182,13 @@ module.exports = function (app, express) {
   //                          //
   //////////////////////////////
 
-  app.get('/', 
+  app.get('/',
     ensureAuthenticated,
     function (req, res) {
     res.render('index');
   });
 
-  app.get('/dashboard', 
+  app.get('/dashboard',
     ensureAuthenticated,
     function (req, res) {
     res.render('index');
@@ -211,16 +200,16 @@ module.exports = function (app, express) {
     res.redirect('/signin');
   });
 
-  app.get('/profile', 
+  app.get('/profile',
     ensureAuthenticated,
     function (req, res) {
     res.render('profile');
   });
 
-  app.get('/connect', 
+  app.get('/connect',
     ensureAuthenticated,
     function (req, res) {
-    res.render('connect');
+    res.render('index');
   });
 
   app.get('/signin', function (req, res) {
@@ -230,6 +219,7 @@ module.exports = function (app, express) {
   app.use(express.static(__dirname + '/../../client'));
 
   app.get('/users', ensureAuthenticated, userRouter); 
+
 
   app.use('/api', apiRouter);
   app.use(helpers.errorLogger);
