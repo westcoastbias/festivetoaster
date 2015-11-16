@@ -13,6 +13,8 @@ module.exports = function(grunt) {
           'client/views/tileView.js',
           'client/collections/users.js',
           'client/views/dashboardView.js',
+          'client/views/connectView.js',
+          'client/views/profileView.js',
           'client/router.js'
         ],
         dest: 'client/build/production.js'
