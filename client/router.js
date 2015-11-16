@@ -12,7 +12,8 @@ Driftly.Router = Backbone.Router.extend({
   routes: {
     '': 'index',
     'create': 'create',
-    'dashboard': 'dashboard'
+    'dashboard': 'dashboard',
+    'connect': 'connect'
   },
 
   swapView: function (view) {
@@ -31,6 +32,12 @@ Driftly.Router = Backbone.Router.extend({
     var users = new Driftly.Users();
     var dashboardView = new Driftly.DashboardView({ collection: users });
     this.swapView(dashboardView);
+  },
+
+  connect: function () {
+    var users = new Driftly.Users();
+    var connectView = new Driftly.ConnectView({ collection: users });
+    this.swapView(connectView);
   },
 
   create: function () {

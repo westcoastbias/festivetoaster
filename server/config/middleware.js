@@ -131,12 +131,12 @@ module.exports = function (app, express) {
   var redirect_uri = 'http://localhost:8000/auth/fitbit/callback';
   var scope =  [ 'activity' ];
 
-  app.get('/auth/fitbit', 
+  app.get('/auth/fitbit',
     function(req, res, next) {
       var authorization_uri = client.getAuthorizationUrl(redirect_uri, scope);
       res.redirect(authorization_uri);
-  }); 
-        
+  });
+
   app.get('/auth/fitbit/callback', ensureAuthenticated, function(req, res, next) {
     var code = req.query.code;
     client.getToken(code, redirect_uri)
@@ -144,14 +144,14 @@ module.exports = function (app, express) {
       token = token.token;
       db.User.findOne({ where: {fbID: req.user.dataValues.fbID} })
       .then(function(user) {
-          db.AccountFitBit.findOrCreate({ 
-            where: { 
+          db.AccountFitBit.findOrCreate({
+            where: {
               fitBitID: token.user_id} })
           .then(function(account) {
             db.AccountFitBit.findOne({fitBitID: token.user_id})
             .then(function(account) {
               account.update({
-                fitBitAccessToken: token.access_token, 
+                fitBitAccessToken: token.access_token,
                 fitBitRefreshToken: token.refresh_token})
               .then(function(accountObj) {
                 client.getTimeSeries({
@@ -161,7 +161,7 @@ module.exports = function (app, express) {
                   db.AccountFitBit.findOne({fitBitID: token.user_id})
                   .then(function(account) {
                     account.update({
-                      latestSteps: results['activities-steps'][0].value, 
+                      latestSteps: results['activities-steps'][0].value,
                       latestStepsTimeStamp: results['activities-steps'][0].dateTime})
                     .then(function(accountObj) {
                       // console.log('accountOBj.dataValues =', accountObj.dataValues);
@@ -191,28 +191,28 @@ module.exports = function (app, express) {
   //                          //
   //////////////////////////////
 
-  app.get('/', 
+  app.get('/',
     ensureAuthenticated,
     function (req, res) {
     res.render('index');
   });
 
-  app.get('/dashboard', 
+  app.get('/dashboard',
     ensureAuthenticated,
     function (req, res) {
     res.render('index');
   });
 
-  app.get('/profile', 
+  app.get('/profile',
     ensureAuthenticated,
     function (req, res) {
     res.render('profile');
   });
 
-  app.get('/connect', 
+  app.get('/connect',
     ensureAuthenticated,
     function (req, res) {
-    res.render('connect');
+    res.render('index');
   });
 
   app.get('/signin', function (req, res) {
@@ -221,7 +221,7 @@ module.exports = function (app, express) {
 
   app.use(express.static(__dirname + '/../../client'));
 
-  app.use('/users', userRouter); 
+  app.use('/users', userRouter);
 
   app.use('/api', apiRouter);
   app.use(helpers.errorLogger);
