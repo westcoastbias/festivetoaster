@@ -231,11 +231,6 @@ module.exports = function (app, express) {
   require('../controllers/userRoutes.js')(userRouter);
   require('../controllers/apiRoutes.js')(apiRouter);
 
-  app.get('*',
-    ensureAuthenticated,
-    function(req, res) {
-      res.render('index')
-    });
 };
 
 

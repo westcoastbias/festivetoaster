@@ -3,7 +3,6 @@
   "version": "0.0.1",
   "description": "",
   "main": "server/server.js",
-  "pre-commit": "lint",
   "author": "festive-toasters",
   "license": "MIT",
   "dependencies": {
