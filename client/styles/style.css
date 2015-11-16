@@ -17,3 +17,24 @@
 .dashboard {
   text-align: center;
 }
+
+.jumbotron.landing {
+  background: url('../img/drift.jpg') no-repeat center center;
+  display: block;
+  height: 600px;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  color: white;
+}
+
+.container.content {
+  padding: 100px;
+}
+
+#about {
+  padding: 90px;
+  color: black;
+  height: 400px;
+}
