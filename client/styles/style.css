@@ -38,3 +38,33 @@
   color: black;
   height: 400px;
 }
+
+#fitbit{
+  margin-top:100px;
+  text-align:center;
+  border: solid 1px #00C7C8;
+  border-radius: 25px;
+  width:150px;
+  margin: 0 auto;
+}
+
+#fitbit > input {
+  font-family: 'Lato', sans-serif;
+  color: #00C7C8;
+  font-size: 13px;
+}
+
+#fitbit p:hover{
+  color: #FFF;
+  transition: .4s;
+}
+
+#fitbit:hover{
+  background-color:#00C7C8;
+  transition:.4s;
+}
+
+input {
+  border: none;
+  background: none;
+}
